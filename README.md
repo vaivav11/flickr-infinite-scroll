@@ -1,3 +1,21 @@
+# Flickr Infinite Scroll
+
+## Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/vaivav11/flickr-infinite-scroll.git
+   cd flickr-infinite-scroll
+   ```
+2. Install dependencies:
+   npm install
+3. Create a .env file and add your Flickr API key:
+   REACT_APP_FLICKR_API_KEY=your_flickr_api_key
+4. Start the development server:
+   npm start
+5. Run the tests:
+   npm test
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
