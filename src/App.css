@@ -1,19 +1,28 @@
 nav {
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-  background-color: #333;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px;
+  background-color: #078;
 }
 
 nav a {
+  background-color: transparent;
+  border: 2px solid white;
   color: white;
+  padding: 10px 20px; 
   text-decoration: none;
-  font-size: 18px;
+  border-radius: 20px; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 14px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 nav a:hover {
-  text-decoration: underline;
+  background-color: white;
+  color: #333;
 }
 
 body {
@@ -28,21 +37,18 @@ body {
   padding: 16px;
 }
 
-/* Desktop */
 @media (min-width: 1024px) {
   .gallery, .favorites {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
 
-/* Tablet */
 @media (min-width: 768px) and (max-width: 1023px) {
   .gallery, .favorites {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
 
-/* Phone */
 @media (max-width: 767px) {
   .gallery, .favorites {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
