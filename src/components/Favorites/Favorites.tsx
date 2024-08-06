@@ -20,12 +20,7 @@ const Favorites: React.FC = () => {
         <p>No favorite photos yet.</p>
       ) : (
         favorites.map(photo => (
-          <PhotoCard
-            key={photo.id}
-            photo={photo}
-            onFavorite={handleFavorite}
-            isFavorite={true}
-          />
+          <PhotoCard key={photo.id} photo={photo} onFavorite={handleFavorite} isFavorite />
         ))
       )}
     </div>
@@ -33,3 +28,4 @@ const Favorites: React.FC = () => {
 };
 
 export default Favorites;
+
