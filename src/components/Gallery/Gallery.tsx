@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PhotoCard from '../PhotoCard/PhotoCard';
-import './Gallery.css';
 
 const Gallery: React.FC = () => {
   const [photos, setPhotos] = useState<any[]>([]);

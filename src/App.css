@@ -28,12 +28,13 @@ nav a:hover {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  background-color: #e6e6e6;
 }
 
 .gallery, .favorites {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  gap: 20px;
   padding: 16px;
 }
 
@@ -59,4 +60,3 @@ body {
     height: 100px;
   }
 }
-

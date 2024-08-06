@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PhotoCard from '../PhotoCard/PhotoCard';
-import './Favorites.css';
 
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<any[]>(() => {

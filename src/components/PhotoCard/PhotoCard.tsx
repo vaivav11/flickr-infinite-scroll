@@ -1,4 +1,3 @@
-// src/components/PhotoCard.tsx
 import React, { useEffect, useRef } from 'react';
 import './PhotoCard.css';
 
