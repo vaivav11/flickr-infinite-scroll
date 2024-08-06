@@ -1,4 +1,3 @@
-// src/components/Gallery.tsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PhotoCard from '../PhotoCard/PhotoCard';
 import './Gallery.css';
