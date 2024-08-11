@@ -78,3 +78,20 @@
   background-color: white;
   color: #333;
 }
+
+.separator-line {
+  width: 50%;
+  margin: 8px 0;
+  border: none;
+  border-top: 2px solid white; 
+}
+
+.photo-author { 
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0 10px;
+  color: white !important;
+  font-style: italic;
+  font-weight: bold;
+}

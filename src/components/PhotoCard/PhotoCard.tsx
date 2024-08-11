@@ -51,6 +51,8 @@ const PhotoCard: React.FC<PhotoCardProps> = React.memo(({ photo, onFavorite, isF
     <div className="photo-card">
       <div className="photo-overlay">
         <h3>{photo.title}</h3>
+        <hr className="separator-line" /> 
+        <p className="photo-author">{photo.owner}</p>
         <button onClick={() => onFavorite(photo)}>{isFavorite ? 'Unfavorite' : 'Favorite'}</button>
       </div>
       <img ref={imageRef} src={imageUrl} alt={photo.title} className="lazy-load" />
