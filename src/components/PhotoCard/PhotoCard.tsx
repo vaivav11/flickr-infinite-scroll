@@ -7,7 +7,7 @@ interface PhotoCardProps {
   isFavorite: boolean;
 }
 
-const PhotoCard: React.FC<PhotoCardProps> = ({ photo, onFavorite, isFavorite }) => {
+const PhotoCard: React.FC<PhotoCardProps> = React.memo(({ photo, onFavorite, isFavorite }) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const imageUrl = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg`;
   const imageUrlLarge = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`;
@@ -56,6 +56,6 @@ const PhotoCard: React.FC<PhotoCardProps> = ({ photo, onFavorite, isFavorite }) 
       <img ref={imageRef} src={imageUrl} alt={photo.title} className="lazy-load" />
     </div>
   );
-};
+});
 
 export default PhotoCard;

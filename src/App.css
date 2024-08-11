@@ -60,3 +60,11 @@ body {
     height: auto;
   }
 }
+
+.search-input {
+  margin-left: auto;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+}

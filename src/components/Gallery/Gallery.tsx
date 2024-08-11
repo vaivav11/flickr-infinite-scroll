@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PhotoCard from '../PhotoCard/PhotoCard';
 
-const Gallery: React.FC = () => {
+interface GalleryProps {
+  searchQuery: string;
+}
+
+const Gallery: React.FC<GalleryProps> = React.memo(({ searchQuery }) => {
   const [photos, setPhotos] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true); 
   const [favorites, setFavorites] = useState<any[]>(() => {
     const savedFavorites = localStorage.getItem('favorites');
     return savedFavorites ? JSON.parse(savedFavorites) : [];
@@ -12,15 +17,44 @@ const Gallery: React.FC = () => {
 
   const fetchPhotos = useCallback(async () => {
     setLoading(true);
-    const response = await fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=${process.env.REACT_APP_FLICKR_API_KEY}&format=json&nojsoncallback=1&page=${page}`);
-    const data = await response.json();
-    setPhotos(prevPhotos => [...prevPhotos, ...data.photos.photo]);
+    try {
+      const baseUrl = 'https://api.flickr.com/services/rest/';
+      const searchMethod = searchQuery
+        ? 'flickr.photos.search'
+        : 'flickr.photos.getRecent';
+
+      const url = `${baseUrl}?method=${searchMethod}&api_key=${process.env.REACT_APP_FLICKR_API_KEY}&format=json&nojsoncallback=1&page=${page}&text=${encodeURIComponent(searchQuery)}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      setPhotos(prevPhotos => {
+        const existingIds = new Set(prevPhotos.map(photo => photo.id));
+        const newPhotos = data.photos.photo.filter((photo: any) => !existingIds.has(photo.id));
+        
+        if (newPhotos.length === 0) {
+          setHasMore(false);
+        }
+        
+        return [...prevPhotos, ...newPhotos];
+      });
+    } catch (error) {
+      console.error('Failed to fetch photos:', error);
+    }
     setLoading(false);
-  }, [page]);
+  }, [page, searchQuery]);
 
   useEffect(() => {
-    fetchPhotos();
-  }, [fetchPhotos]);
+    setPage(1);
+    setPhotos([]);
+    setHasMore(true);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (hasMore) {
+      fetchPhotos();
+    }
+  }, [fetchPhotos, hasMore, page]);
 
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -32,13 +66,13 @@ const Gallery: React.FC = () => {
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && hasMore) {
           setPage(prevPage => prevPage + 1);
         }
       });
       if (node) observer.current.observe(node);
     },
-    [loading]
+    [loading, hasMore]
   );
 
   const handleFavorite = (photo: any) => {
@@ -67,6 +101,8 @@ const Gallery: React.FC = () => {
       {loading && <p>Loading...</p>}
     </div>
   );
-};
+});
 
 export default Gallery;
+
+
