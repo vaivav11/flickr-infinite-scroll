@@ -9,7 +9,7 @@ const Gallery: React.FC<GalleryProps> = React.memo(({ searchQuery }) => {
   const [photos, setPhotos] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true); 
+  const [hasMore, setHasMore] = useState(true);
   const [favorites, setFavorites] = useState<any[]>(() => {
     const savedFavorites = localStorage.getItem('favorites');
     return savedFavorites ? JSON.parse(savedFavorites) : [];
@@ -31,15 +31,17 @@ const Gallery: React.FC<GalleryProps> = React.memo(({ searchQuery }) => {
       setPhotos(prevPhotos => {
         const existingIds = new Set(prevPhotos.map(photo => photo.id));
         const newPhotos = data.photos.photo.filter((photo: any) => !existingIds.has(photo.id));
-        
+
         if (newPhotos.length === 0) {
           setHasMore(false);
+        } else {
+          setHasMore(true);
         }
-        
+
         return [...prevPhotos, ...newPhotos];
       });
     } catch (error) {
-      console.error('Failed to fetch photos:', error);
+      setHasMore(false); 
     }
     setLoading(false);
   }, [page, searchQuery]);
@@ -51,10 +53,11 @@ const Gallery: React.FC<GalleryProps> = React.memo(({ searchQuery }) => {
   }, [searchQuery]);
 
   useEffect(() => {
-    if (hasMore) {
+    if (hasMore && !loading) {
       fetchPhotos();
     }
-  }, [fetchPhotos, hasMore, page]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchPhotos, hasMore]);
 
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -65,6 +68,7 @@ const Gallery: React.FC<GalleryProps> = React.memo(({ searchQuery }) => {
     (node: HTMLElement | null) => {
       if (loading) return;
       if (observer.current) observer.current.disconnect();
+
       observer.current = new IntersectionObserver(entries => {
         if (entries[0].isIntersecting && hasMore) {
           setPage(prevPage => prevPage + 1);
@@ -89,20 +93,29 @@ const Gallery: React.FC<GalleryProps> = React.memo(({ searchQuery }) => {
         if (photos.length === index + 1) {
           return (
             <div ref={lastPhotoElementRef} key={photo.id}>
-              <PhotoCard photo={photo} onFavorite={handleFavorite} isFavorite={favorites.some(fav => fav.id === photo.id)} />
+              <PhotoCard
+                photo={photo}
+                onFavorite={handleFavorite}
+                isFavorite={favorites.some(fav => fav.id === photo.id)}
+              />
             </div>
           );
         } else {
           return (
-            <PhotoCard key={photo.id} photo={photo} onFavorite={handleFavorite} isFavorite={favorites.some(fav => fav.id === photo.id)} />
+            <PhotoCard
+              key={photo.id}
+              photo={photo}
+              onFavorite={handleFavorite}
+              isFavorite={favorites.some(fav => fav.id === photo.id)}
+            />
           );
         }
       })}
       {loading && <p>Loading...</p>}
+      {!hasMore && photos.length > 0 && <p>No more photos to load.</p>}
+      {!loading && photos.length === 0 && <p>No photos found.</p>}
     </div>
   );
 });
 
 export default Gallery;
-
-
